@@ -1,6 +1,7 @@
 package com.woobee.utils;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +13,54 @@ public class DBConnector {
   private Connection connect = null;
   private PreparedStatement statement = null;
   private ResultSet resultSet = null;
-  private String connString = "jdbc:mysql://<host>/<db>?user=<username>&password=<password>";
+  private String connString = "jdbc:mysql://<host>/<db>?user=<uname>&password=<pwd>";
 
+  public ArrayList<Item> readUserWithinDist(int user_id) throws Exception {
+    ArrayList<Item> items = new ArrayList<Item>();
+    try {
+      double mYlatitude=0;
+      double mYlongitude=0;
+      Class.forName("com.mysql.jdbc.Driver");
+      connect = DriverManager.getConnection(connString);
+      PreparedStatement statement = connect.prepareStatement("SELECT * FROM user WHERE id =?");
+      statement.setString(1, Integer.toString(user_id));
+      ResultSet rs = statement.executeQuery();
+      while (rs.next()) {
+        mYlatitude = rs.getDouble("office_lat");
+        mYlongitude = rs.getDouble("office_lon");
+      }
+      statement = connect.prepareStatement("SELECT * FROM `user` WHERE id != ? AND id NOT IN (SELECT to_id FROM `blocked_reported` WHERE by_user_id = ? AND block_or_report = 'block')");
+      statement.setString(1, Integer.toString(user_id));
+      statement.setString(2, Integer.toString(user_id));
+      rs = statement.executeQuery();
+      while (rs.next()) {
+        double latitude = rs.getDouble("office_lat");
+        double longitude = rs.getDouble("office_lon");
+        double distanceInKms = DistanceCal.distance(mYlatitude,mYlongitude,latitude,longitude, "K");
+        int userId = rs.getInt("id");
+        if (distanceInKms <= 500.00) {
+          
+          Item item = new Item();
+          Skill skill = readUserSkills(userId, item);
+          User user = readUser(userId);
+          
+          item.setSkill(skill);
+          item.setUser(user);
+          items.add(item);
+        }
+      }
+    }
+    catch(Exception e){
+      e.printStackTrace();
+      logger.error(e.toString());
+      
+    }
+    finally {
+      close();
+    }
+    return items;
+  }
+  
   public Skill readUserSkills(int id, Item item) throws Exception {
     Skill skillObj = new Skill();
     try {

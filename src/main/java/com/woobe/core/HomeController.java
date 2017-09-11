@@ -45,7 +45,7 @@ public class HomeController {
 	@RequestMapping(value = "api/data/load/userskills", method = RequestMethod.GET)
   public @ResponseBody UserSkillsResponse getUserSkills(@RequestParam("user_id") int userId) throws Exception {
 	  DBConnector db = new DBConnector();
-	  
+	  /*
 	  Item item = new Item();
 	  Skill skill = db.readUserSkills(userId, item);
 	  User user = db.readUser(userId);
@@ -54,10 +54,10 @@ public class HomeController {
 	  item.setSkill(skill);
 	  item.setUser(user);
 	  items.add(item);
-	  
+	  */
 	  UserSkillsResponse uskr = new UserSkillsResponse();
     uskr.setVersion(0);
-    uskr.setItems(items);
+    uskr.setItems(db.readUserWithinDist(userId));
     
 	  return uskr;
 	}
