@@ -6,9 +6,9 @@
 </head>
 <body>
 <h1>
-	Hello world!  
+	Hi There!  
 </h1>
 
-<P>  The time on the server is ${serverTime}. </P>
+<P>  Welcome to Woobe Core Apis! This is just a page(showing time), probably not the place you want to be ! The client locale is ${serverTime}. </P>
 </body>
 </html>

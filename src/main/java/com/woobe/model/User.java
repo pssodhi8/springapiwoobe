@@ -9,7 +9,7 @@ public class User implements Serializable{
   com.woobe.model.Config config;
   Rating rating;
   String social;
-  
+  String resume_pic;	
   String email;
   String deviceToken;
   String address;
@@ -38,10 +38,12 @@ public class User implements Serializable{
   String office_city;
   String office_country;
   String office_postalcode;
+  String curr_lat;
+  String curr_lon;
   int agree;
   int id;
   int userId;
-  
+    
   public Avatar getAvatar() {
     return avatar;
   }
@@ -65,6 +67,12 @@ public class User implements Serializable{
   }
   public void setSocial(String social) {
     this.social = social;
+  }
+  public String getResume_pic() {
+	  return resume_pic;
+  }
+  public void setResume_pic(String resume_pic) {
+	  this.resume_pic = resume_pic;
   }
   public String getEmail() {
     return email;
@@ -236,6 +244,18 @@ public class User implements Serializable{
   }
   public void setOffice_postalcode(String office_postalcode) {
     this.office_postalcode = office_postalcode;
+  }
+  public String getCurr_lat() {
+	  return curr_lat;
+  }
+  public void setCurr_lat(String curr_lat) {
+	  this.curr_lat = curr_lat;
+  }
+  public String getCurr_lon() {
+	  return curr_lon;
+  }
+  public void setCurr_lon(String curr_lon) {
+	  this.curr_lon = curr_lon;
   }
   public int getAgree() {
     return agree;
